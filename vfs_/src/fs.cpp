@@ -1,8 +1,10 @@
-#include "../include/FS.h"
+#include "../include/fs.h"
 
-std::string FS::convert_size(const uint64_t& bytes_) const noexcept {
+using namespace VFS;
+
+std::string fs::convert_size(const uint64_t& bytes_) const noexcept {
     long double ret = 0;
-    long double bytes = static_cast<long double>(bytes_);
+    auto bytes = static_cast<long double>(bytes_);
 
     char buffer[10];
     memset(buffer, '\0', 10);
@@ -34,15 +36,15 @@ std::string FS::convert_size(const uint64_t& bytes_) const noexcept {
     return std::string(std::string(buffer));
 }
 
-FILE* FS::get_file_handlr(const char* file, char* type) noexcept {
+FILE* fs::get_file_handlr(const char* file, char* type) noexcept {
     FILE* handlr = fopen(file, type);
     return handlr;
 }
 
-uint64_t FS::get_ext_file_buffer(const char* path, std::byte*& payload) noexcept {
+uint64_t fs::get_ext_file_buffer(const char* path, std::shared_ptr<std::byte[]>& payload) noexcept {
     FILE* file = get_file_handlr(path);
 
-    if(file == NULL) {
+    if(file == nullptr) {
         return 0;
     }
 
@@ -51,13 +53,13 @@ uint64_t FS::get_ext_file_buffer(const char* path, std::byte*& payload) noexcept
     rewind(file);
 
 
-    payload = new std::byte[fsize];
-    fread(payload, sizeof(std::byte), fsize, file);
+    payload = std::shared_ptr<std::byte[]>(new std::byte[fsize]);
+    fread(payload.get(), sizeof(std::byte), fsize, file);
     fclose(file);
     return fsize;
 }
 
-long FS::get_file_size(const char* path) noexcept {
+long fs::get_file_size(const char* path) noexcept {
     FILE* file = get_file_handlr(path);
     fseek(file, 0L, SEEK_END);
     long sz = ftell(file);
@@ -65,7 +67,7 @@ long FS::get_file_size(const char* path) noexcept {
     return sz;
 }
 
-void FS::store_ext_file_buffer(const char* path, std::byte* payload, uint64_t size) noexcept {
+void fs::store_ext_file_buffer(const char* path, std::shared_ptr<std::byte[]>& payload, uint64_t size) noexcept {
     FILE* file = get_file_handlr(path, (char*)"w+");
 
     ftruncate(fileno(file), size);
@@ -73,6 +75,6 @@ void FS::store_ext_file_buffer(const char* path, std::byte* payload, uint64_t si
     fclose(file);
 
     FILE* file_ = get_file_handlr(path, (char*)"r+");
-    fwrite(payload, get_file_size(path), sizeof(char), file);
+    fwrite(payload.get(), get_file_size(path), sizeof(char), file);
     fclose(file);
 }

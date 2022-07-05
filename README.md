@@ -8,7 +8,7 @@
 <br />
 
 # What is it?
-> An emulation of Virtual File System that allows the user to create and mount Internal/Remote file systems. Disks that are mounted are stored within 'disks/' folder, written as binary in a FAT32 implementation with the use of a superblock, fat table and userspace which are separated by clusters. Defined szies of these segments are defined within 'config.h' and can be manipulated to the user's preference.
+> An emulation of Virtual File System that allows the user to create and mount Internal/Remote file systems. Disks that are mounted are stored within 'disks/' folder, written as binary in a fat32 implementation with the use of a superblock, fat table and userspace which are separated by clusters. Defined szies of these segments are defined within 'config.h' and can be manipulated to the user's preference.
 
 > Overall, hopefully this program will allow the user to store folders/files within a binary disk and perform operations on them locally or remotely.
 <br />
@@ -18,10 +18,10 @@
 > Perform action on the virtual file system to add and mount disks or remote connections. Other actions such as initialising a server socket on a specific port.
 <pre>
 /vfs ls     - lists the current mounted systems                          | -> /vfs ls
-/vfs ifs    - controls internal file systems within the vfs              | -> /vfs ifs add/rm [DISK_NAME] [FS_TYPE]
-/vfs rfs    - controls remote file systems within the vfs                | -> /vfs rfs add/rm [NAME] [IP] [PORT]
-/vfs mnt    - initialises the file system and mounts it towards the vfs  | -> /vfs mnt [DISK_NAME]
-/vfs umnt   - deletes file system data/disk from vfs                     | -> /vfs umnt
+/vfs ifs    - controls internal file systems within the mp_vfs              | -> /vfs ifs add/rm [DISK_NAME] [FS_TYPE]
+/vfs rfs    - controls remote file systems within the mp_vfs                | -> /vfs rfs add/rm [NAME] [IP] [PORT]
+/vfs mnt    - initialises the file system and mounts it towards the mp_vfs  | -> /vfs mnt [DISK_NAME]
+/vfs umnt   - deletes file system data/disk from mp_vfs                     | -> /vfs umnt
 /vfs server - toggles server initialisation for client connection on local host on specified port the user to access control of the virtual file system.
 </pre>
 

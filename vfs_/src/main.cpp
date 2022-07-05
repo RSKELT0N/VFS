@@ -2,10 +2,11 @@
 
 int main(int argc, char** argv) {
     BUFFER.hold_buffer();
-    VFS::get_vfs()->load_disks();
-    terminal* term = terminal::get_instance();
+    VFS::vfs::get_vfs()->load_disks();
+
+    VFS::terminal* term = VFS::terminal::get_instance();
     term->run();
 
     delete term;
-    return 0;
+    pthread_exit(0); // wait for all threads to die.
 }
